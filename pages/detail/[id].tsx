@@ -26,6 +26,10 @@ const Detail = ({postDetails}:IProps) => {
   const videoRef = useRef(null);
   const router = useRouter();
   const { userProfile }: any = useAuthStore();
+  const [comment, setComment] = useState<string>('');
+  const [isPostingComment, setIsPostingComment] = useState<boolean>(false);;
+
+
 
   const handleLike = async (like: boolean) => {
     if (userProfile) {
@@ -38,18 +42,36 @@ const Detail = ({postDetails}:IProps) => {
     }
   } ;
 
+  const addComment = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (userProfile && comment ) {
+      
+        setIsPostingComment(true);
+        const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+          userId: userProfile._id,
+          comment,
+        });
+        setPost({ ...post, comments: data.comments });
+        setComment('');
+        setIsPostingComment(false);
+    }
+  };
+
+
+
   if(!post) return null;
 
   return (
     <div className='flex w-full absolute left-0 top-0 bg-white flex-wrap lg:flex-nowrap'>
-      <div className='relative flex-2 w-[1000px] lg:w-9/12 flex justify-center items-center bg-blurred-img bg-no-repeat bg-cover bg-center'>
+      <div className='relative flex-2 w-[1000px] h-[100vh] lg:w-9/12 flex justify-center items-center bg-blurred-img bg-no-repeat bg-cover bg-center'>
         <div className='opacity-90 absolute top-6 left-2 lg:left-6 flex gap-6 z-50'>
           <p className='cursor-pointer ' onClick={() => router.back()}>
             <MdOutlineCancel className='text-white text-[35px] hover:opacity-90'/>
           </p>
         </div>
         <div className='relative'>
-          <div className='lg:h-[100vh] h-[60vh]'>
+          <div className='h-[100vh] h-[90vh]'>
             <video
             ref={videoRef}
             loop
@@ -65,7 +87,7 @@ const Detail = ({postDetails}:IProps) => {
       </div>
 
       <div className='relative w-[1000px] md:w-[900px] lg:w-[700px]'>
-        <div className='lg:mt-20 mt-10'>
+        <div>
 
 
           <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded '>
@@ -97,12 +119,12 @@ const Detail = ({postDetails}:IProps) => {
                   </Link>
               </div>
             </div>
-
-            <div className='px-10'>
-                <p className=' text-md text-gray-600'>{post.caption}</p>
-            </div>
-
-            <div className='mt-10 px-10'>
+            
+              <div className='pt-5 px-12 '>
+                 <p className=' text-md text-gray-600'>{post.caption}</p>
+              </div>
+            
+            <div className='ml-12'>
                {userProfile && (<LikeButton
                   likes={post.likes}
                   flex='flex'
@@ -112,7 +134,11 @@ const Detail = ({postDetails}:IProps) => {
             </div>
 
             <Comments
-                
+                comment={comment}
+                setComment={setComment}
+                addComment={addComment}
+                comments={post.comments}
+                isPostingComment={isPostingComment}
               />
 
 
