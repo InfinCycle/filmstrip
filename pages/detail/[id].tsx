@@ -71,14 +71,14 @@ const Detail = ({postDetails}:IProps) => {
           </p>
         </div>
         <div className='relative'>
-          <div className='h-[100vh] h-[90vh]'>
+          <div className='w-[80vh] h-[90vh]'>
             <video
             ref={videoRef}
             loop
             controls
             onClick={() => {}}
             src={post.video.asset.url}
-            className=' h-full cursor-pointer'
+            className='absolute ml-14 h-full cursor-pointer'
             >
 
             </video>
