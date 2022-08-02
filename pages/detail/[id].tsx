@@ -70,15 +70,15 @@ const Detail = ({postDetails}:IProps) => {
             <MdOutlineCancel className='text-white text-[35px] hover:opacity-90'/>
           </p>
         </div>
-        <div className='relative'>
-          <div className='w-[80vh] h-[90vh]'>
+        <div className='relative '>
+          <div className='flex justify-center items-center w-[80vh] h-[90vh] '>
             <video
             ref={videoRef}
             loop
             controls
             onClick={() => {}}
             src={post.video.asset.url}
-            className='absolute ml-14 h-full cursor-pointer'
+            className=' absolute h-full cursor-pointer'
             >
 
             </video>
